@@ -78,6 +78,8 @@ with lib;
             ""
             "${cfg.package}/bin/xray -config \${RUNTIME_DIRECTORY}/config.json"
           ];
+          Restart = "always";
+          RestartSec = "10s";
         };
       };
     };
