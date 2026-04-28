@@ -23,6 +23,7 @@
   outputs = inputs@{
     self,
     nixpkgs,
+    disko,
     ...
   }: {
     nixosConfigurations = {
@@ -42,6 +43,16 @@
           ./hosts/bwh/configuration.nix
         ];
       };
+
+      lib5 = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          disko.nixosModules.disko
+          ./common
+          ./hosts/lib5/configuration.nix
+        ];
+      };
+
     };
   };
 }

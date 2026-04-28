@@ -64,7 +64,6 @@ in {
       openssh.authorizedKeys.keys = ssh-keys;
       packages = with pkgs; ([
         gh
-        zellij
       ] ++ lib.optionals config.limited.enable [
         xdg-utils 
         nodejs 
@@ -108,7 +107,6 @@ in {
 
     environment.systemPackages = with pkgs; ([
       tree
-      dig
       netcat
       curl
       ranger
