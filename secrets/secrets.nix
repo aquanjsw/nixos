@@ -5,8 +5,8 @@ let
   bwh-system = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEpzIcG2uFa8DIdHFgp9bHp9msFExzUYsilAmUnBTQuO";
   bwh-user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIENvcZL6L6QpDotsU6xgClQ4f16NhUOoCIFr7lOXOLVk";
 
-  lib5-system = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGna2YD2hz4PnKVntFors2juVa1dMyQu2ib8r/BGXopZ";
-  lib5-user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSD2Z1C5ex8Irq0GR17ZuGnQfJaNqI6r3YWCS7Ya9mr";
+  lib5-system = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC08h/FP6qqvdfr9tdue9SRjB/auHP0c/15+3cp4xmiZ";
+  lib5-user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF/Nwn3AJ+MltE7EbwkqqhaQRqrhFB7nnwvsPP/TaF+U";
 
   users = [ minimal-user bwh-user lib5-user ];
   systems = [ minimal-system bwh-system lib5-system ];

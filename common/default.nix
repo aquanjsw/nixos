@@ -138,7 +138,6 @@ in {
     nix.settings.auto-optimise-store = true;
     nix.settings.substituters = lib.optionals (!config.oversea.enable)
       [ "https://mirrors.cernet.edu.cn/nix-channels/store" ];
-    nix.gc.automatic = true;
   };
 }
 

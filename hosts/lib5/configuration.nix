@@ -17,10 +17,12 @@
   nix.settings.trusted-public-keys = [ "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M=" ];
 
   fileSystems."/data" = {
-    device = "/dev/bcache0";
+    device = lib.mkForce "/dev/bcache0";
     fsType = "xfs";
     options = [ "nofail" ];
   };
+  boot.initrd.services.lvm.enable = true;
+  boot.initrd.availableKernelModules = [ "bcache" ];
 
   networking.hostName = "lib5";
 
