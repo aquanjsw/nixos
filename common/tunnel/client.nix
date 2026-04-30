@@ -19,7 +19,7 @@
     {
       log = {
         disabled = false;
-        level = "info";
+        level = "error";
         timestamp = true;
       };
       dns = {
@@ -153,7 +153,7 @@
             rules = [
               {
                 domain_suffix = [
-                  { _secret = secrets.domain.path; }
+                  "zaelggk.com"
                 ];
               }
             ];
@@ -203,13 +203,13 @@
         {
           type = "vless";
           tag = "main";
-          server = { _secret = secrets.domain.path; };
+          server = "zaelggk.com";
           server_port = 443;
           uuid = { _secret = secrets.vless-uuid.path; };
           flow = "xtls-rprx-vision";
           tls = {
             enabled = true;
-            server_name = { _secret = secrets.domain.path; };
+            server_name = "zaelggk.com";
             reality = {
               enabled = true;
               public_key = { _secret = secrets.reality-public-key.path; };

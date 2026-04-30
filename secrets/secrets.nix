@@ -13,11 +13,11 @@ let
 in {
   "caddy-env.age".publicKeys = users ++ [ bwh-system ];
   "django-env.age".publicKeys = users ++ [ bwh-system ];
+
   "vless-uuid.age".publicKeys = users ++ systems;
   "reality-public-key.age".publicKeys = users ++ systems;
   "reality-private-key.age".publicKeys = users ++ systems;
   "clash-api-secret.age".publicKeys = users ++ systems;
-  "domain.age".publicKeys = users ++ systems;
   "inbound-password.age".publicKeys = users ++ systems;
 }
 

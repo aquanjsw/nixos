@@ -10,7 +10,7 @@ SUBSCRIPTION_PATH = BASE_DIR / 'test/config.json' if DEBUG else os.environ['SUBS
 
 SECRET_KEY = 'x' * 50 if DEBUG else os.environ['SECRET_KEY']
 
-ALLOWED_HOSTS = [ 'localhost' ] + ([ os.environ['DOMAIN'] ] if not DEBUG else [])
+ALLOWED_HOSTS = [ "zaelggk.com" ]
 
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -48,7 +48,6 @@ in {
       reality-private-key = { file = secrets + "/reality-private-key.age"; };
       reality-public-key = { file = secrets + "/reality-public-key.age"; };
       clash-api-secret = { file = secrets + "/clash-api-secret.age"; };
-      domain = { file = secrets + "/domain.age"; };
       inbound-password = { file = secrets + "/inbound-password.age"; };
       django-env = { file = secrets + "/django-env.age"; };
     };

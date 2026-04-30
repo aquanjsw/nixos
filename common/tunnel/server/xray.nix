@@ -36,7 +36,7 @@
             show = false;
             dest = 1443;
             serverNames = [
-              { _secret = secrets.domain.path; }
+              "zaelggk.com"
             ];
             privateKey = { _secret = secrets.reality-private-key.path; };
             shortIds = [ "" ];

@@ -14,7 +14,7 @@
       hash = "sha256-Olz4W84Kiyldy+JtbIicVCL7dAYl4zq+2rxEOUTObxA=";
     };
     extraConfig = ''
-      {$DOMAIN} {
+      zaelggk.com {
         root * ${config.services.caddy.dataDir}
         route /config.json {
           basic_auth {

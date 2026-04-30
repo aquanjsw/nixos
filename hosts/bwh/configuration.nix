@@ -19,6 +19,27 @@
     zramSwap.memoryPercent = 100;
     
     networking.hostName = "bwh";
+    networking.sits.ip6net = {
+      local = "138.128.193.71";
+      remote = "45.32.66.87";
+      ttl = 255;
+    };
+    # networking.defaultGateway6.interface = "ip6net";
+    # networking.defaultGateway6.address = "2607:8700:5500:5b28::2/64";
+    networking.interfaces.ip6net.ipv6 = {
+        addresses = [
+          {
+            address = "2607:8700:5500:5b28::2";
+            prefixLength = 64;
+          }
+        ];
+        routes = [
+          {
+            address = "::";
+            prefixLength = 0;
+          }
+        ];
+    };
 
     boot.loader.grub.device = "/dev/sda";
     boot.loader.grub.enable = true;
