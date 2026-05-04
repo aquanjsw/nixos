@@ -5,11 +5,6 @@
     ./hardware-configuration.nix
   ];
 
-  home-manager.users.rag = {
-    programs.java.enable = true;
-    programs.java.package = pkgs.openjdk25_headless;
-  };
-
   tunnel.client.enable = true;
 
   boot.loader.systemd-boot.enable = true;
@@ -20,6 +15,16 @@
   hardware.nvidia.open = true;
   nix.settings.substituters = [ "https://cache.nixos-cuda.org" ];
   nix.settings.trusted-public-keys = [ "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M=" ];
+
+  users.users.rag = {
+    packages = with pkgs; [
+      screen
+    ];
+  };
+
+  environment.systemPackages = with pkgs; [
+    usbutils
+  ];
 
   fileSystems."/data" = {
     device = lib.mkForce "/dev/bcache0";

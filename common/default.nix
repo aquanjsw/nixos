@@ -1,16 +1,16 @@
 {
-  inputs, 
-  config, 
+  inputs,
+  config,
   pkgs,
-  lib, 
-  ...  
-}: let 
+  lib,
+  ...
+}: let
   ssh-keys = lib.strings.splitString "\n"
     (lib.strings.trim (builtins.readFile inputs.ssh-keys));
 in {
-  
+
   imports = [
-    inputs.home-manager.nixosModules.home-manager 
+    inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.default
     ./tunnel
   ];
@@ -36,9 +36,15 @@ in {
       default = false;
       description = "Whether the system is oversea.";
     };
+
+    domain = lib.mkOption {
+      type = lib.types.str;
+      default = "zaelggk.com";
+      readOnly = true;
+    };
   };
 
-  config = let 
+  config = let
     secrets = config.paths.secrets;
   in {
 
@@ -50,6 +56,7 @@ in {
       clash-api-secret = { file = secrets + "/clash-api-secret.age"; };
       inbound-password = { file = secrets + "/inbound-password.age"; };
       django-env = { file = secrets + "/django-env.age"; };
+      beszel-agent-env = { file = secrets + "/beszel-agent-env.age"; };
     };
 
     users.users.rag = {
@@ -61,10 +68,9 @@ in {
       openssh.authorizedKeys.keys = ssh-keys;
       packages = with pkgs; ([
         gh
-        zellij
       ] ++ lib.optionals (!config.limited.enable) [
-        xdg-utils 
-        nodejs 
+        xdg-utils
+        nodejs
       ]);
     };
 
@@ -72,8 +78,8 @@ in {
     home-manager.useUserPackages = true;
     home-manager.users.rag = {
       pkgs,
-      lib, 
-      ... 
+      lib,
+      ...
     }: {
 
       programs.git.settings.user = {
@@ -120,6 +126,11 @@ in {
 
     services.openssh.enable = true;
     services.openssh.settings.PasswordAuthentication = false;
+    services.beszel.agent.enable = lib.mkDefault true;
+    services.beszel.agent.environmentFile = config.age.secrets.beszel-agent-env.path;
+    services.beszel.agent.environment = {
+      HUB_URL = "https://beszel.${config.domain}";
+    };
 
     networking.networkmanager.enable = true;
     networking.iproute2.enable = true;
@@ -127,8 +138,10 @@ in {
     networking.nftables.enable = true;
 
     zramSwap.enable = true;
+    zramSwap.memoryPercent = lib.mkIf config.limited.enable 100;
 
     nixpkgs.config.allowUnfree = true;
+    environment.variables.NIXPKGS_ALLOW_UNFREE = "1";
 
     time.timeZone = "Asia/Shanghai";
 

@@ -96,6 +96,7 @@
           environment = {
             PORT = builtins.toString cfg.port;
             SUBSCRIPTION_PATH = cfg.subscriptionPath;
+            DOMAIN = config.domain;
           };
           serviceConfig = {
             EnvironmentFile = [ cfg.envFile ];

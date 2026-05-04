@@ -6,6 +6,10 @@
     ./hardware-configuration.nix
   ];
 
+  options.domain = lib.mkOption {
+    type = lib.types.str;
+  };
+
   config = {
 
     limited.enable = true;
@@ -16,16 +20,14 @@
     services.web-server.subscriptionPath = config.tunnel.subscriptionPath;
     services.web-server.envFile = config.age.secrets.django-env.path;
 
-    zramSwap.memoryPercent = 100;
-    
+    services.beszel.hub.enable = true;
+
     networking.hostName = "bwh";
     networking.sits.ip6net = {
       local = "138.128.193.71";
       remote = "45.32.66.87";
       ttl = 255;
     };
-    # networking.defaultGateway6.interface = "ip6net";
-    # networking.defaultGateway6.address = "2607:8700:5500:5b28::2/64";
     networking.interfaces.ip6net.ipv6 = {
         addresses = [
           {

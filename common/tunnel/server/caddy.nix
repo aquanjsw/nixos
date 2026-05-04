@@ -14,7 +14,7 @@
       hash = "sha256-Olz4W84Kiyldy+JtbIicVCL7dAYl4zq+2rxEOUTObxA=";
     };
     extraConfig = ''
-      zaelggk.com {
+      ${config.domain} {
         root * ${config.services.caddy.dataDir}
         route /config.json {
           basic_auth {
@@ -23,6 +23,10 @@
           reverse_proxy 127.0.0.1:${builtins.toString config.services.web-server.port}
         }
         file_server
+      }
+
+      beszel.${config.domain} {
+        reverse_proxy 127.0.0.1:${builtins.toString config.services.beszel.hub.port}
       }
     '';
     globalConfig = ''

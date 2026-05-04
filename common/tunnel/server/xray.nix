@@ -8,13 +8,12 @@
 
   services.xray.enable = true;
   services.xray.settings = let 
-
     secrets = config.age.secrets;
   in
-  
+
   {
     log = {
-      loglevel = "none";
+      loglevel = "warning";
     };
     inbounds = [
       {
@@ -36,7 +35,8 @@
             show = false;
             dest = 1443;
             serverNames = [
-              "zaelggk.com"
+              config.domain
+              "beszel.${config.domain}"
             ];
             privateKey = { _secret = secrets.reality-private-key.path; };
             shortIds = [ "" ];

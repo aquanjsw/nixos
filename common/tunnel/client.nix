@@ -12,7 +12,6 @@
   options.tunnel.client.config = lib.mkOption {
     type = lib.types.attrsOf lib.types.anything;
     default = let 
-
       secrets = config.age.secrets;
     in
     
@@ -153,7 +152,7 @@
             rules = [
               {
                 domain_suffix = [
-                  "zaelggk.com"
+                  config.domain
                 ];
               }
             ];
@@ -203,13 +202,13 @@
         {
           type = "vless";
           tag = "main";
-          server = "zaelggk.com";
+          server = config.domain;
           server_port = 443;
           uuid = { _secret = secrets.vless-uuid.path; };
           flow = "xtls-rprx-vision";
           tls = {
             enabled = true;
-            server_name = "zaelggk.com";
+            server_name = config.domain;
             reality = {
               enabled = true;
               public_key = { _secret = secrets.reality-public-key.path; };
