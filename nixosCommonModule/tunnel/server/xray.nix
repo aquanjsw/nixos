@@ -7,7 +7,7 @@
 }: lib.mkIf config.tunnel.server.enable {
 
   services.xray.enable = true;
-  services.xray.settings = let 
+  services.xray.settings = let
     secrets = config.age.secrets;
   in
 
@@ -33,11 +33,8 @@
           security = "reality";
           realitySettings = {
             show = false;
-            dest = 1443;
-            serverNames = [
-              config.domain
-              "beszel.${config.domain}"
-            ];
+            dest = config.services.caddy.httpsPort;
+            serverNames = builtins.attrNames config.services.caddy.virtualHosts;
             privateKey = { _secret = secrets.reality-private-key.path; };
             shortIds = [ "" ];
           };

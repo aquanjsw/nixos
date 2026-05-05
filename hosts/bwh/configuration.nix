@@ -1,8 +1,6 @@
 { config, lib, inputs, ... }: {
 
   imports = [
-    inputs.agenix.nixosModules.default 
-    inputs.web-server.nixosModules.default
     ./hardware-configuration.nix
   ];
 
@@ -12,15 +10,27 @@
 
   config = {
 
+    age.secrets = let
+      path = config.paths.secrets;
+    in {
+      caddy-env.file = path + "/caddy-env.age";
+      django-env.file = path + "/django-env.age";
+    };
+
     limited.enable = true;
     oversea.enable = true;
     tunnel.server.enable = true;
 
+    services.caddy.enable = true;
     services.web-server.enable = true;
-    services.web-server.subscriptionPath = config.tunnel.subscriptionPath;
+    services.web-server.subscription.path = config.tunnel.subscription.path;
+    services.web-server.subscription.name = config.tunnel.subscription.name;
     services.web-server.envFile = config.age.secrets.django-env.path;
 
     services.beszel.hub.enable = true;
+    services.caddy.virtualHosts."beszel.${config.domain}".extraConfig = ''
+      reverse_proxy 127.0.0.1:${builtins.toString config.services.beszel.hub.port}
+    '';
 
     networking.hostName = "bwh";
     networking.sits.ip6net = {

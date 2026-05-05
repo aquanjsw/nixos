@@ -1,20 +1,16 @@
 {
-  lib, 
-  config, 
-  inputs, 
-  ... 
+  lib,
+  config,
+  inputs,
+  ...
 }: {
-
-  imports = [ 
-    inputs.agenix.nixosModules.default
-  ];
 
   options.tunnel.client.config = lib.mkOption {
     type = lib.types.attrsOf lib.types.anything;
-    default = let 
+    default = let
       secrets = config.age.secrets;
     in
-    
+
     {
       log = {
         disabled = false;
@@ -192,6 +188,7 @@
           auto_route = true;
           auto_redirect = true;
           strict_route = true;
+          mtu = 1280;
         }
       ];
       outbounds = [
@@ -232,9 +229,10 @@
   };
 
   options.tunnel.client.enable = lib.mkEnableOption "tunnel client";
-  
+
   config = lib.mkIf config.tunnel.client.enable {
     services.sing-box.enable = true;
     services.sing-box.settings = config.tunnel.client.config;
   };
+
 }

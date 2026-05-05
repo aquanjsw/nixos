@@ -1,6 +1,8 @@
+import os
 import subalter.views
+
 from django.urls import path
 
 urlpatterns = [
-    path('config.json', subalter.views.config),
+    path(os.environ["SUBSCRIPTION_NAME"], subalter.views.config),
 ]

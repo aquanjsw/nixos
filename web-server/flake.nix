@@ -11,7 +11,8 @@
     nixpkgs,
     pyproject-nix,
     ...
-  }: let 
+  }: let
+
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
     project = pyproject-nix.lib.project.loadPyproject {
@@ -20,15 +21,16 @@
     python = pkgs.python3;
     pythonEnv = python.withPackages
       (project.renderers.withPackages { inherit python; });
+
   in with pkgs;{
 
-    devShells.${system}.default = 
+    devShells.${system}.default =
       mkShellNoCC {
         packages = [ pythonEnv ];
         DEBUG = "1";
       };
 
-    packages.${system}.default = with lib; stdenv.mkDerivation {
+    packages.x86_64-linux.default = with lib; stdenv.mkDerivation {
       name = "django-web-server";
       src = fileset.toSource {
         root = ./.;
@@ -54,7 +56,7 @@
       config,
       pkgs,
       ...
-    }: with lib; let 
+    }: with lib; let
       cfg = config.services.web-server;
     in {
       options.services.web-server = {
@@ -71,10 +73,15 @@
           default = 8000;
           description = "The port to run the web server on.";
         };
-        subscriptionPath = mkOption {
+        subscription.path = mkOption {
           type = types.str;
           example = "/run/secrets/config.json";
           description = "The path to the subscription config file.";
+        };
+        subscription.name = mkOption {
+          type = types.str;
+          example = "config.json";
+          description = "The name of the subscription config file.";
         };
         envFile = mkOption {
           type = types.str;
@@ -95,7 +102,8 @@
           after = [ "network.target" ];
           environment = {
             PORT = builtins.toString cfg.port;
-            SUBSCRIPTION_PATH = cfg.subscriptionPath;
+            SUBSCRIPTION_PATH = cfg.subscription.path;
+            SUBSCRIPTION_NAME = cfg.subscription.name;
             DOMAIN = config.domain;
           };
           serviceConfig = {
