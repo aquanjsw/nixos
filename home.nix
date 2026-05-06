@@ -22,7 +22,7 @@ in {
     netcat
     curl
     yazi
-    screen
+    tmux
     inputs.agenix.packages."${pkgs.stdenv.hostPlatform.system}".default
   ]
   ++ lib.optionals (!finalArgs.isLimited) [
