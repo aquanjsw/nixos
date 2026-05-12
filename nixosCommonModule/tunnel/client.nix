@@ -12,12 +12,16 @@
     in
 
     {
+
       log = {
         disabled = false;
-        level = "error";
+        level = "info";
         timestamp = true;
       };
+
       dns = {
+        strategy = "ipv4_only";
+
         servers = [
           {
             type = "udp";
@@ -34,28 +38,22 @@
             type = "local";
             tag = "lan";
           }
-          {
-            type = "fakeip";
-            tag = "fakeip";
-            inet4_range = "198.18.0.0/15";
-            inet6_range = "fc00::/18";
-          }
         ];
+
         rules = [
+          {
+            action = "route";
+            rule_set = [
+              "tailscale"
+            ];
+            server = "lan";
+          }
           {
             action = "route";
             server = "lan";
             rule_set = [
               "geosite-lan"
             ];
-          }
-          {
-            query_type = [
-              "A"
-              "AAAA"
-            ];
-            action = "route";
-            server = "fakeip";
           }
           {
             action = "route";
@@ -68,6 +66,7 @@
           }
         ];
       };
+
       route = {
         auto_detect_interface = true;
         rules = [
@@ -77,6 +76,21 @@
           {
             protocol = "dns";
             action = "hijack-dns";
+          }
+          {
+            action = "route";
+            rule_set = [
+              "tailscale"
+            ];
+            outbound = "direct";
+          }
+          {
+            action = "route";
+            process_name = [
+              "leigod.exe"
+              "leishenSdk.exe"
+            ];
+            outbound = "direct";
           }
           {
             action = "route";
@@ -98,6 +112,9 @@
               "geosite-ieee"
               "geosite-lan"
             ];
+            domain_suffix = [
+              ".cn"
+            ];
             outbound = "direct";
           }
           {
@@ -110,6 +127,30 @@
           }
         ];
         rule_set = [
+          {
+            tag = "tailscale";
+            type = "inline";
+            rules = [
+              {
+                type = "logical";
+                mode = "or";
+                rules = [
+                  {
+                    process_name = [
+                      "tailscale.exe"
+                      "tailscaled.exe"
+                      "tailscale-ipn.exe"
+                    ];
+                  }
+                  {
+                    domain_suffix = [
+                      ".tail2fa86.ts.net"
+                    ];
+                  }
+                ];
+              }
+            ];
+          }
           {
             tag = "geosite-lan";
             type = "inline";
@@ -172,12 +213,6 @@
           type = "mixed";
           listen = "::";
           listen_port = 7890;
-          users = [
-            {
-              username = "rag";
-              password = { _secret = secrets.inbound-password.path; };
-            }
-          ];
         }
         {
           type = "tun";
@@ -188,7 +223,10 @@
           auto_route = true;
           auto_redirect = true;
           strict_route = true;
-          mtu = 1280;
+          route_exclude_address = [
+            "100.64.0.0/10"
+            "fd7a:115c:a1e0::/48"
+          ];
         }
       ];
       outbounds = [
@@ -217,7 +255,7 @@
           };
         }
         {
-          type = "urltest";
+          type = "selector";
           tag = "proxy";
           outbounds = [
             "main"

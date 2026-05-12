@@ -38,7 +38,6 @@
       reality-private-key.file = path + "/reality-private-key.age";
       reality-public-key.file = path + "/reality-public-key.age";
       clash-api-secret.file = path + "/clash-api-secret.age";
-      inbound-password.file = path + "/inbound-password.age";
       beszel-agent-env.file = path + "/beszel-agent-env.age";
     };
 

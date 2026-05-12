@@ -18,7 +18,6 @@ in {
   "reality-public-key.age".publicKeys = users ++ systems;
   "reality-private-key.age".publicKeys = users ++ systems;
   "clash-api-secret.age".publicKeys = users ++ systems;
-  "inbound-password.age".publicKeys = users ++ systems;
   "beszel-agent-env.age".publicKeys = users ++ systems;
 }
 
