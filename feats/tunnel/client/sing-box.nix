@@ -172,6 +172,11 @@
             ip_is_private = true;
             outbound = "direct";
           }
+          {
+            action = "route";
+            preferred_by = [ "ts-ep" ];
+            outbound = "ts-ep";
+          }
         ];
 
       };
