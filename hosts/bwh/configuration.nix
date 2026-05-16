@@ -10,7 +10,7 @@
     isOversea = true;
     tunnel.server.enable = true;
     frps.enable = true;
-    flakes.web-app.enable = true;
+    web-app.enable = true;
 
     services.beszel.hub.enable = true;
     services.caddy.enable = true;

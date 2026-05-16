@@ -51,12 +51,12 @@ in {
       basic_auth {
         rag {$HASHED_PASSWORD}
       }
-      reverse_proxy 127.0.0.1:${builtins.toString config.flakes.web-app.port}
+      reverse_proxy 127.0.0.1:${builtins.toString config.web-app.port}
     '';
 
     assertions = [
       {
-        assertion = config.flakes.web-app.enable;
+        assertion = config.web-app.enable;
         message = "Tunnel subscription requires web app to be enabled.";
       }
     ];

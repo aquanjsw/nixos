@@ -55,6 +55,8 @@ in {
     ];
   };
 
+  age.secrets.caddy-env.file = config.paths.secrets + "/caddy-env.age";
+
   systemd.services.caddy.serviceConfig = {
     ReadOnlyPaths = [
       site

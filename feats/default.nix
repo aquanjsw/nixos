@@ -37,69 +37,70 @@
   config = let
     ssh-keys = lib.strings.splitString "\n"
       (lib.strings.trim (builtins.readFile inputs.ssh-keys));
-  in {
-
-    flakes.web-app.envFile = config.age.secrets.web-app-env.path;
-
-    users.users.${config.user} = {
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-      ] ++ lib.optional (config.services.aria2.enable) "aria2";
-      shell = pkgs.fish;
-      openssh.authorizedKeys.keys = ssh-keys;
-      packages = with pkgs; [
-      ];
-    };
-    users.users.root.openssh.authorizedKeys.keys = ssh-keys;
-
-    environment.variables.EDITOR = "vim";
-    environment.variables.NIXPKGS_ALLOW_UNFREE = "1";
-    environment.systemPackages = with pkgs; ([
-    ]);
-
-    programs.fish.enable = true;
-    programs.nix-ld.enable = !config.isLimited;
-
-    services.frp.instances.default = lib.mkIf config.frps.enable {
-      enable = true;
-      role = "server";
-      settings = {
-        bindPort = 7000;
+  in lib.mkMerge [
+    {
+      users.users.${config.user} = {
+        isNormalUser = true;
+        extraGroups = [
+          "wheel"
+        ] ++ lib.optional (config.services.aria2.enable) "aria2";
+        shell = pkgs.fish;
+        openssh.authorizedKeys.keys = ssh-keys;
+        packages = with pkgs; [
+        ];
       };
-    };
-    services.openssh.enable = true;
-    services.openssh.settings.PasswordAuthentication = false;
-    services.beszel.agent.enable = lib.mkDefault true;
-    services.beszel.agent.environmentFile = config.age.secrets.beszel-agent-env.path;
-    services.beszel.agent.environment = {
-      HUB_URL = "https://beszel.${config.domain}";
-    };
+      users.users.root.openssh.authorizedKeys.keys = ssh-keys;
 
-    networking.networkmanager.enable = true;
-    networking.iproute2.enable = true;
-    networking.firewall.enable = false;
-    networking.nftables.enable = true;
+      environment.variables.EDITOR = "vim";
+      environment.variables.NIXPKGS_ALLOW_UNFREE = "1";
+      environment.systemPackages = with pkgs; ([
+      ]);
 
-    zramSwap.enable = true;
-    zramSwap.memoryPercent = lib.mkIf config.isLimited 100;
+      programs.fish.enable = true;
+      programs.nix-ld.enable = !config.isLimited;
 
-    time.timeZone = "Asia/Shanghai";
+      services.frp.instances.default = lib.mkIf config.frps.enable {
+        enable = true;
+        role = "server";
+        settings = {
+          bindPort = 7000;
+        };
+      };
+      services.openssh.enable = true;
+      services.openssh.settings.PasswordAuthentication = false;
+      services.beszel.agent.enable = lib.mkDefault true;
+      services.beszel.agent.environmentFile = config.age.secrets.beszel-agent-env.path;
+      services.beszel.agent.environment = {
+        HUB_URL = "https://beszel.${config.domain}";
+      };
 
-    i18n.defaultLocale = "en_US.UTF-8";
+      networking.networkmanager.enable = true;
+      networking.iproute2.enable = true;
+      networking.firewall.enable = false;
+      networking.nftables.enable = true;
 
-    nix.settings.experimental-features = [ "nix-command" "flakes" ];
-    nix.settings.substituters = lib.optionals (!config.isOversea)
-      [ "https://mirrors.cernet.edu.cn/nix-channels/store" ];
+      zramSwap.enable = true;
+      zramSwap.memoryPercent = lib.mkIf config.isLimited 100;
 
-    age.secrets = let
-      path = config.paths.secrets;
-    in {
-      beszel-agent-env.file = path + "/beszel-agent-env.age";
-      web-app-env.file = path + "/web-app-env.age";
-      caddy-env.file = path + "/caddy-env.age";
-    };
-  };
+      time.timeZone = "Asia/Shanghai";
+
+      i18n.defaultLocale = "en_US.UTF-8";
+
+      nix.settings.experimental-features = [ "nix-command" "flakes" ];
+      nix.settings.substituters = lib.optionals (!config.isOversea)
+        [ "https://mirrors.cernet.edu.cn/nix-channels/store" ];
+
+      age.secrets = let
+        path = config.paths.secrets;
+      in {
+        beszel-agent-env.file = path + "/beszel-agent-env.age";
+      };
+    }
+    (lib.mkIf config.web-app.enable {
+      age.secrets.web-app-env.file = config.paths.secrets + "/web-app-env.age";
+      web-app.envFile = config.age.secrets.web-app-env.path;
+    })
+  ];
 }
 
 # vim: sts=2 sw=2 et ai

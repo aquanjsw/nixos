@@ -260,7 +260,7 @@
 
     tunnel.subscription.sing-box.settings = config.tunnel.client.sing-box.settings;
 
-    flakes.web-app.subscription.sing-box = lib.mkIf config.flakes.web-app.enable {
+    web-app.subscription.sing-box = lib.mkIf config.web-app.enable {
       configPath = config.tunnel.subscription.sing-box.path;
       urlPath = "sing-box.json";
     };

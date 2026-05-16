@@ -56,9 +56,9 @@
       pkgs,
       ...
     }: with lib; let
-      cfg = config.flakes.web-app;
+      cfg = config.web-app;
     in {
-      options.flakes.web-app = {
+      options.web-app = {
         enable = mkEnableOption "web app";
         package = mkOption {
           type = types.package;
@@ -108,7 +108,7 @@
         };
       };
 
-      config = mkIf config.flakes.web-app.enable {
+      config = mkIf config.web-app.enable {
         systemd.services.web-app = {
           description = " web app";
           wantedBy = [ "multi-user.target" ];

@@ -167,7 +167,7 @@
 
     tunnel.subscription.mihomo.settings = config.tunnel.client.mihomo.settings;
 
-    flakes.web-app.subscription.mihomo = lib.mkIf config.flakes.web-app.enable {
+    web-app.subscription.mihomo = lib.mkIf config.web-app.enable {
       configPath = config.tunnel.subscription.mihomo.path;
       urlPath = "mihomo.json";
     };
