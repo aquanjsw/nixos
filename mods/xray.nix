@@ -69,6 +69,9 @@ with lib;
               script = pkgs.writeShellScript "xray-pre-start" ''
                 ${utils.genJqSecretsReplacementSnippet config.services.xray.settings "/run/xray/config.json"}
                   chown --reference=/run/xray /run/xray/config.json
+                  # To solve an unknown reason causing xray to fail to start
+                  # when xray-related configuration is changed.
+                  ${pkgs.coreutils}/bin/sleep 3
               '';
             in
             "+${script}";
