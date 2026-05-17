@@ -11,7 +11,7 @@
     ./hardware-configuration.nix
   ];
 
-  age.secrets.rpc-secret = config.path.secrets + "/rpc-secret.age";
+  age.secrets.rpc-secret.file = config.paths.secrets + "/rpc-secret.age";
 
   tunnel.client.sing-box.enable = true;
 
@@ -61,6 +61,7 @@
       nix-index
       python313Packages.django
       nil
+      uv
     ];
   };
 
