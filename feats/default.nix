@@ -9,6 +9,7 @@
   imports = [
     ./tunnel
     ./caddy
+    ./derper.nix
   ];
 
   options = {

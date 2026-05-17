@@ -12,6 +12,7 @@
     frps.enable = true;
     web-app.enable = true;
 
+    services.tailscale.derper.enable = true;
     services.beszel.hub.enable = true;
     services.caddy.enable = true;
 
