@@ -1,4 +1,5 @@
-{ config, lib, inputs, ... }: {
+{ ... }:
+{
 
   imports = [
     ./hardware-configuration.nix
@@ -23,18 +24,18 @@
       ttl = 255;
     };
     networking.interfaces.ip6net.ipv6 = {
-        addresses = [
-          {
-            address = "2607:8700:5500:5b28::2";
-            prefixLength = 64;
-          }
-        ];
-        routes = [
-          {
-            address = "::";
-            prefixLength = 0;
-          }
-        ];
+      addresses = [
+        {
+          address = "2607:8700:5500:5b28::2";
+          prefixLength = 64;
+        }
+      ];
+      routes = [
+        {
+          address = "::";
+          prefixLength = 0;
+        }
+      ];
     };
 
     boot.loader.grub.device = "/dev/sda";

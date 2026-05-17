@@ -1,15 +1,17 @@
-{ config, pkgs, lib, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
 
   imports = [
     ./disk-config.nix
     ./hardware-configuration.nix
   ];
 
-  age.secrets = let
-    path = config.paths.secrets;
-  in {
-    rpc-secret.file = path + "/rpc-secret.age";
-  };
+  age.secrets.rpc-secret = config.path.secrets + "/rpc-secret.age";
 
   tunnel.client.sing-box.enable = true;
 
@@ -50,7 +52,9 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.open = true;
   nix.settings.substituters = [ "https://cache.nixos-cuda.org" ];
-  nix.settings.trusted-public-keys = [ "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M=" ];
+  nix.settings.trusted-public-keys = [
+    "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+  ];
 
   users.users.${config.user} = {
     packages = with pkgs; [

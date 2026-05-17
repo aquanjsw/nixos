@@ -5,9 +5,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   finalArgs = config // args;
-in {
+in
+{
   programs.git.enable = true;
   programs.vim.enable = true;
   programs.vim.defaultEditor = true;
@@ -16,20 +18,26 @@ in {
 
   home.username = finalArgs.user;
   home.homeDirectory = "/home/${finalArgs.user}";
-  home.packages = with pkgs; ([
-    gh
-    tree
-    yazi
-    tmux
-    btop
-    inputs.agenix.packages."${pkgs.stdenv.hostPlatform.system}".default
-    python3
-  ]
-  ++ lib.optionals (!finalArgs.isLimited) [ xdg-utils nodejs ]
-  ++ lib.optionals (!finalArgs.isNixOS) [ home-manager ]
-  );
+  home.packages =
+    with pkgs;
+    (
+      [
+        gh
+        tree
+        yazi
+        tmux
+        btop
+        inputs.agenix.packages."${pkgs.stdenv.hostPlatform.system}".default
+        python3
+      ]
+      ++ lib.optionals (!finalArgs.isLimited) [
+        xdg-utils
+        nodejs
+      ]
+      ++ lib.optionals (!finalArgs.isNixOS) [ home-manager ]
+    );
 
-  home.activation.init = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.init = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     ${lib.getExe pkgs.git} config --global user.name "aquanjsw"
     ${lib.getExe pkgs.git} config --global user.email "zhdlcc@gmail.com"
 
